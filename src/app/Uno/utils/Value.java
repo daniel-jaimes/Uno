@@ -1,0 +1,6 @@
+package utils;
+
+public enum Value {
+    CERO, UNO, DOS, TRES, CUATRO, CINCO, SEIS, SIETE, OCHO,
+    NUEVE, CAMBIO, MAS_DOS, SALTO, CAMBIO_COLOR, MAS_CUATRO;
+}
