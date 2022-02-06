@@ -32,11 +32,11 @@ public class Controller {
             }
         } while (correctAuthentication);
     }
-    private void uploadPlayersToDB() throws SQLException, ExecutionException {
+    private void uploadPlayersDB() throws SQLException, ExecutionException {
         service.insertNewPlayers();
     }
 
     private void uploadPlayersIfNotExist() throws SQLException, ExecutionException {
-        if(!service.checkUserExistInDB()) uploadPlayersToDB();
+        if(!service.checkUserExistInDB()) uploadPlayersDB();
     }
 }
