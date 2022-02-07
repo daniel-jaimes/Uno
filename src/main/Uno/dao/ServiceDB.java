@@ -14,8 +14,8 @@ public class ServiceDB {
         mysqlDB = new MySqlDB();
     }
 
-    public Card stealCard(int id_player) throws ExecutionException {
-        int lastIdCard = 0;
+    public int getLastIdCard() throws ExecutionException {
+        int lastIdCard;
         try {
             mysqlDB.connect();
             lastIdCard = mysqlDB.getLastIdCard();
@@ -23,20 +23,19 @@ public class ServiceDB {
         } catch (SQLException e) {
             throw new ExecutionException(ExecutionException.ERROR_DB);
         }
-        return getNewCard(lastIdCard + 1, id_player);
+        return lastIdCard;
 
     }
-    public Card getNewCard(int id, int id_player) throws ExecutionException {
-        Card card;
+    public void setNewCard(int id_player) throws ExecutionException {
         CardIdentifier ci = CardIdentifier.generateSpecs();
-        card = new Card(id, ci);
         try {
             mysqlDB.connect();
-            mysqlDB.insertCardToDB(card, id_player);
+            mysqlDB.recordCard(ci, id_player);
+            mysqlDB.disconnect();
         } catch (SQLException e) {
             throw new ExecutionException(ExecutionException.ERROR_DB);
         }
-        return card;
+
     }
 
     public ArrayList<Card> getDeckOfOnePlayerById(int id) throws ExecutionException {

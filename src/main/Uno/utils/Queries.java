@@ -16,9 +16,9 @@ public class Queries {
                     "FROM carta c " +
                     "LEFT JOIN partida p " +
                     "ON c.id = p.id_carta " +
-                    "WHERE c.id_jugador = ? AND p.id_carta IS NULL;";
+                    "WHERE c.id_jugador = ? AND p.id_carta IS NULL";
     public static final String GET_LAST_ID_CARD_PLAYED =
-            "SELECT max(id) 'id', id_carta FROM partida";
+            "SELECT id_carta FROM partida WHERE id = (SELECT max(id) FROM partida)";
     public static final String GET_CARD_BY_ID =
             "SELECT id, numero, color FROM carta WHERE id = ?";
     public static final String INSERT_CARD_PLAYED =

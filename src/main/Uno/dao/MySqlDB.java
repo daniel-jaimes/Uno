@@ -21,20 +21,20 @@ public class MySqlDB {
     private static final String USER_CONNECTION = "root";
     private static final String PASS_CONNECTION = "DAM2T_M03";
 
-    public synchronized void connect() throws SQLException {
+    public void connect() throws SQLException {
         String url = CONNECTION;
         String user = USER_CONNECTION;
         String passwd = PASS_CONNECTION;
         connection = DriverManager.getConnection(url, user, passwd);
     }
 
-    public synchronized void disconnect() throws SQLException {
+    public void disconnect() throws SQLException {
         if (connection != null) {
             connection.close();
         }
     }
 
-    public synchronized int getLastIdCard() throws SQLException {
+    public int getLastIdCard() throws SQLException {
         int id = 0;
         try (Statement st = connection.createStatement()){
             try (ResultSet rs = st.executeQuery(GET_LAST_ID_CARD)){
@@ -45,7 +45,7 @@ public class MySqlDB {
         }
         return id;
     }
-    public synchronized void insertNewPlayer(String[] player) throws SQLException {
+    public void insertNewPlayer(String[] player) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_PLAYER)){
             ps.setString(1, player[0]);
             ps.setString(2, player[1]);
@@ -53,7 +53,7 @@ public class MySqlDB {
             ps.executeUpdate();
         }
     }
-    public synchronized boolean usersExist() throws SQLException {
+    public boolean usersExist() throws SQLException {
         try (Statement st = connection.createStatement()){
             try (ResultSet rs = st.executeQuery(GET_ALL_USERS)){
                 return rs.next();
@@ -61,7 +61,7 @@ public class MySqlDB {
         }
     }
 
-    public synchronized Player getAuthPlayer(String user, String passwd) throws SQLException {
+    public Player getAuthPlayer(String user, String passwd) throws SQLException {
         Player player = null;
         try(PreparedStatement ps = connection.prepareStatement(GET_AUTH_USER)){
             ps.setString(1, user);
@@ -77,7 +77,7 @@ public class MySqlDB {
         }
         return player;
     }
-    public synchronized ArrayList<Card> getDeckOfOnePlayerById(int id) throws SQLException {
+    public ArrayList<Card> getDeckOfOnePlayerById(int id) throws SQLException {
         ArrayList<Card> deck = new ArrayList<>();
         try(PreparedStatement ps = connection.prepareStatement(GET_DECK_OF_ONE_PLAYER)){
             ps.setInt(1, id);
@@ -96,16 +96,16 @@ public class MySqlDB {
         return deck;
     }
 
-    public synchronized void insertCardToDB(Card card, int id_player) throws SQLException {
+    public void recordCard(CardIdentifier card, int id_player) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_CARD_OF_PLAYER)){
             ps.setInt(1, id_player);
-            ps.setString(2, card.getCard().getNumber().toString());
-            ps.setString(3, card.getCard().getColor().toString());
+            ps.setString(2, card.getNumber().name());
+            ps.setString(3, card.getColor().name());
             ps.executeUpdate();
         }
     }
 
-    public synchronized Card getLastCardPlayed() throws SQLException {
+    public Card getLastCardPlayed() throws SQLException {
         Card card = null;
         Integer idLastCardPlayed;
         if((idLastCardPlayed = getLastIdCardPlayed()) != null){
@@ -126,7 +126,7 @@ public class MySqlDB {
         }
         return card;
     }
-    private synchronized Integer getLastIdCardPlayed() throws SQLException {
+    private Integer getLastIdCardPlayed() throws SQLException {
         Integer lastIdCardPlayed = null;
         try (Statement st = connection.createStatement()){
             try (ResultSet rs = st.executeQuery(GET_LAST_ID_CARD_PLAYED)){
@@ -138,53 +138,53 @@ public class MySqlDB {
         return lastIdCardPlayed;
     }
 
-    public synchronized void deleteCardPlayedById(int id_card) throws SQLException {
+    public void deleteCardPlayedById(int id_card) throws SQLException {
         try(PreparedStatement ps = connection.prepareStatement(DELETE_CARD_BY_ID_FROM_GAME)){
             ps.setInt(1, id_card);
             ps.executeUpdate();
         }
     }
 
-    public synchronized void insertCardToPlay(int id_card) throws SQLException {
+    public void insertCardToPlay(int id_card) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_CARD_PLAYED)){
             ps.setInt(1, id_card);
             ps.executeUpdate();
         }
     }
 
-    public synchronized void deleteCardOfDeckById(int id) throws SQLException {
+    public void deleteCardOfDeckById(int id) throws SQLException {
         try(PreparedStatement ps = connection.prepareStatement(DELETE_CARD_BY_ID_FROM_CARD)){
             ps.setInt(1, id);
             ps.executeUpdate();
         }
     }
 
-    public synchronized void incrementWinGamesOfPlayerById(int id) throws SQLException {
+    public void incrementWinGamesOfPlayerById(int id) throws SQLException {
         try(PreparedStatement ps = connection.prepareStatement(INCREMENT_WIN_GAMES_OF_PLAYER_BY_ID)){
             ps.setInt(1, id);
             ps.executeUpdate();
         }
     }
 
-    public synchronized void incrementGamesOfAllPlayers() throws SQLException {
+    public void incrementGamesOfAllPlayers() throws SQLException {
         try(PreparedStatement ps = connection.prepareStatement(INCREMENT_GAMES_OF_ALL_PLAYERS)){
             ps.executeUpdate();
         }
     }
 
-    public synchronized void resetGameTable() throws SQLException {
+    public void resetGameTable() throws SQLException {
         try(PreparedStatement ps = connection.prepareStatement(DELETE_CONTENT_GAME_TABLE)){
             ps.executeUpdate();
         }
     }
 
-    public synchronized void resetCardTable() throws SQLException {
+    public void resetCardTable() throws SQLException {
         try(PreparedStatement ps = connection.prepareStatement(DELETE_CONTENT_CARD_TABLE)){
             ps.executeUpdate();
         }
     }
 
-    public synchronized void signNewPlayer(Player newPlayer) throws SQLException {
+    public void signNewPlayer(Player newPlayer) throws SQLException {
         try(PreparedStatement ps = connection.prepareStatement(INSERT_PLAYER)){
             ps.setString(1, newPlayer.getUser());
             ps.setString(2, newPlayer.getPass());

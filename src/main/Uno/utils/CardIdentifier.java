@@ -34,7 +34,7 @@ public class CardIdentifier {
 
     @Override
     public String toString() {
-        return "color=" + color +
-                ", number=" + number;
+        return "color=" + color.name() +
+                ", number=" + number.name();
     }
 }

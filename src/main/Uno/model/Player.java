@@ -7,11 +7,10 @@ public class Player {
     private String user;
     private String pass;
     private String name;
+    private ArrayList<Card> cards;
     public ArrayList<Card> getCards() {
         return cards;
     }
-
-    private ArrayList<Card> cards;
     public Player(int id, String user){
         this.id = id;
         this.user = user;

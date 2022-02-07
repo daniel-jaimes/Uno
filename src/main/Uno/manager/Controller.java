@@ -6,6 +6,7 @@ import exceptions.LogicExceptions;
 import model.Card;
 import model.Player;
 import utils.Color;
+import utils.Value;
 
 
 import java.util.ArrayList;
@@ -66,8 +67,8 @@ public class Controller {
 
     private void turn() throws LogicExceptions, ExecutionException {
         getLastCardPlayed();
-        checkDeck();
         checkLastCard();
+        checkDeck();
         selectCardToThrow();
         checkIfEmptyDeck();
     }
@@ -125,9 +126,9 @@ public class Controller {
                         "Robaste: " +
                                 player.getCards().get(player.getCards().size() - 1).toString()
                 );
+                checkDeck();
             }
         } while (!correctCardSelected);
-
     }
 
     private boolean checkCorrectCardToPlay(int selection) throws ExecutionException {
@@ -135,7 +136,8 @@ public class Controller {
         if(lastCard == null ||
                 lastCard.getCard().getColor() == cardSelected.getCard().getColor() ||
                 lastCard.getCard().getColor() == Color.NEGRO ||
-                cardSelected.getCard().getColor() == Color.NEGRO)
+                cardSelected.getCard().getColor() == Color.NEGRO
+        )
         {
             serviceDB.playCard(cardSelected.getId());
             player.getCards().remove(cardSelected);
@@ -159,7 +161,7 @@ public class Controller {
                 }
                 break;
             case SALTO:
-            case CAMBIO_COLOR:
+            case CAMBIO:
                 deleteCardById(lastCard.getId());
                 throw new LogicExceptions(LogicExceptions.JUMP_OR_CHANGE);
         }
@@ -195,6 +197,7 @@ public class Controller {
     }
 
     private void getDeck(ArrayList<Card> deck) {
+        player.getCards().clear();
         deck.forEach(card -> player.getCards().add(card));
     }
 
@@ -202,6 +205,7 @@ public class Controller {
         for (int i = 0; i < 7; i++) {
             addStealCard();
         }
+        checkDeck();
     }
 
     private void logIn(Scanner sc) throws LogicExceptions, ExecutionException {
@@ -237,6 +241,6 @@ public class Controller {
     }
 
     private void addStealCard() throws ExecutionException {
-        player.getCards().add(serviceDB.stealCard(player.getId()));
+        serviceDB.setNewCard(player.getId());
     }
 }
