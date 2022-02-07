@@ -1,0 +1,4 @@
+pep1;stucom;Pepe Barcelona
+pep2;stucom;Pepe Pompeu Fabra
+pep3;stucom;Pepe Autonoma
+pep4;stucom;Pepe Politecnica
